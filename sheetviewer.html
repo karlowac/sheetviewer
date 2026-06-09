@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1a1f2e">
+<meta name="theme-color" content="#0d1117">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="RosterView">
 <title>RosterView</title>
@@ -11,69 +11,32 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── DARK THEME TOKENS ─────────────────────────────────── */
 :root {
-  --bg:           #0d1117;
-  --surface:      #161b22;
-  --surface2:     #21262d;
-  --border:       #30363d;
-  --accent:       #58a6ff;
-  --accent2:      #3fb950;
-  --text:         #e6edf3;
-  --text-dim:     #8b949e;
-  --danger:       #f85149;
-  --row-even:     #161b22;
-  --row-odd:      #0d1117;
-  --row-hover:    #1f2937;
-  --header-bg:    #090d13;
-  --frozen-bg:    #1c2333;
-  --frozen-head:  #131820;
-  --radius:       6px;
-  --mono:         'IBM Plex Mono', monospace;
-  --sans:         'IBM Plex Sans', sans-serif;
-  --topbar-h:     48px;
-  --filterbar-h:  36px;
-  --statusbar-h:  26px;
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #21262d;
+  --border:    #30363d;
+  --accent:    #58a6ff;
+  --accent2:   #3fb950;
+  --text:      #e6edf3;
+  --text-dim:  #8b949e;
+  --danger:    #f85149;
+  --radius:    6px;
+  --mono:      'IBM Plex Mono', monospace;
+  --sans:      'IBM Plex Sans', sans-serif;
 }
 
-/* ── EXCEL (LIGHT) THEME OVERRIDES ─────────────────────── */
-body.excel-theme {
-  --bg:           #ffffff;
-  --surface:      #f3f3f3;
-  --surface2:     #e8e8e8;
-  --border:       #d0d0d0;
-  --accent:       #217346;
-  --accent2:      #2a6099;
-  --text:         #000000;
-  --text-dim:     #595959;
-  --row-even:     #ffffff;
-  --row-odd:      #f9f9f9;
-  --row-hover:    #e8f4e8;
-  --header-bg:    #f3f3f3;
-  --frozen-bg:    #f3f3f3;
-  --frozen-head:  #e8e8e8;
-}
-
-/* ── RESET ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; }
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  transition: background 0.25s, color 0.25s;
-}
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); }
 
-/* ── TOP BAR ───────────────────────────────────────────── */
+/* ── TOP BAR ───────────────────────────────────────── */
 #topbar {
-  height: var(--topbar-h);
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  background: var(--header-bg);
+  height: 48px;
+  background: var(--bg);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
   overflow-x: auto;
@@ -83,23 +46,17 @@ body {
 
 #logo {
   font-family: var(--mono);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--accent);
   white-space: nowrap;
-  margin-right: 4px;
   flex-shrink: 0;
 }
 
-.tb-sep {
-  width: 1px;
-  height: 20px;
-  background: var(--border);
-  flex-shrink: 0;
-}
+.sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
 
 .tb-label {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 600;
   color: var(--text-dim);
   white-space: nowrap;
@@ -118,8 +75,7 @@ body {
   padding: 4px 8px;
   cursor: pointer;
   flex-shrink: 0;
-  max-width: 180px;
-  transition: border-color 0.15s;
+  max-width: 160px;
 }
 .tb-select:focus { outline: none; border-color: var(--accent); }
 
@@ -131,16 +87,17 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 4px 8px;
-  width: 150px;
+  width: 140px;
   flex-shrink: 0;
   transition: border-color 0.15s;
 }
-.tb-input:focus { outline: none; border-color: var(--accent); }
+.tb-input:focus { outline: none; border-color: var(--accent2); }
 .tb-input::placeholder { color: var(--text-dim); }
+.tb-input.active { border-color: var(--accent2); }
 
 .tb-btn {
   font-family: var(--sans);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   background: transparent;
   color: var(--accent);
@@ -150,142 +107,68 @@ body {
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
 .tb-btn:hover { background: var(--surface2); border-color: var(--accent); }
-.tb-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 
 #status-text {
   font-family: var(--mono);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--text-dim);
   white-space: nowrap;
   flex-shrink: 0;
   margin-left: auto;
 }
 
-/* ── TABLE WRAP ────────────────────────────────────────── */
-#table-outer {
+/* ── NAME MATCH PANEL ──────────────────────────────── */
+#match-panel {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+#match-panel.visible { display: flex; }
+#match-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
   flex: 1;
-  overflow: hidden;
+}
+.match-chip {
+  background: var(--surface2);
+  border: 1px solid var(--accent2);
+  border-radius: 4px;
+  padding: 2px 8px;
+  color: var(--accent2);
+  font-size: 0.68rem;
+  cursor: pointer;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+.match-chip:hover { background: var(--accent2); color: var(--bg); }
+.match-chip.active { background: var(--accent2); color: var(--bg); }
+#match-label { color: var(--text-dim); white-space: nowrap; flex-shrink: 0; }
+
+/* ── IFRAME CONTAINER ──────────────────────────────── */
+#frame-wrap {
+  flex: 1;
   position: relative;
   display: flex;
   flex-direction: column;
 }
-
-/* The scrollable viewport */
-#table-scroll {
+#sheet-frame {
   flex: 1;
-  overflow: auto;
-  position: relative;
+  border: none;
+  width: 100%;
 }
 
-/* ── TABLE ─────────────────────────────────────────────── */
-#data-table {
-  border-collapse: collapse;
-  table-layout: fixed;
-  font-size: 0.72rem;
-  font-family: var(--mono);
-}
-
-/* Default (unstyled by Excel) cells */
-#data-table td, #data-table th {
-  border: 1px solid var(--border);
-  padding: 3px 6px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 60px;
-  max-width: 180px;
-  vertical-align: middle;
-  transition: background 0.2s;
-}
-
-/* Excel-styled cells override the theme border with their own */
-body.excel-theme #data-table td,
-body.excel-theme #data-table th {
-  border-color: #d0d0d0;
-}
-
-/* Sticky header row */
-#data-table thead tr th {
-  position: sticky;
-  top: 0;
-  z-index: 4;
-  background: var(--header-bg);
-  font-family: var(--sans);
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
-  text-align: center;
-}
-
-/* Row number column header */
-#data-table thead tr th:first-child {
-  z-index: 6;
-  min-width: 36px;
-  max-width: 36px;
-  width: 36px;
-}
-
-/* Row number cells */
-#data-table tbody td:first-child {
-  color: var(--text-dim);
-  font-size: 0.6rem;
-  text-align: center;
-  background: var(--surface);
-  min-width: 36px;
-  max-width: 36px;
-  width: 36px;
-  border-right: 2px solid var(--border);
-}
-
-/* Hover rows */
-#data-table tbody tr:hover td:not(.frozen-cell) {
-  background: var(--row-hover) !important;
-}
-
-/* Hidden rows */
-#data-table tbody tr.row-hidden { display: none; }
-
-/* Frozen column cells */
-.frozen-cell {
-  position: sticky;
-  z-index: 3;
-  background: var(--frozen-bg) !important;
-}
-.frozen-cell.head-cell {
-  z-index: 7 !important;
-  background: var(--frozen-head) !important;
-}
-/* Shadow on frozen column */
-.frozen-cell::after {
-  content: '';
-  position: absolute;
-  right: -6px;
-  top: 0; bottom: 0;
-  width: 6px;
-  background: linear-gradient(to right, rgba(0,0,0,0.18), transparent);
-  pointer-events: none;
-}
-
-/* Status bar */
-#statusbar {
-  height: var(--statusbar-h);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-  background: var(--header-bg);
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  color: var(--text-dim);
-}
-
-/* ── OVERLAY ───────────────────────────────────────────── */
+/* ── OVERLAY ───────────────────────────────────────── */
 #overlay {
   position: absolute;
   inset: 0;
@@ -295,7 +178,7 @@ body.excel-theme #data-table th {
   justify-content: center;
   gap: 14px;
   background: var(--bg);
-  z-index: 30;
+  z-index: 10;
 }
 #overlay.hidden { display: none; }
 .spinner {
@@ -311,518 +194,332 @@ body.excel-theme #data-table th {
   font-size: 0.8rem;
   color: var(--text-dim);
   text-align: center;
-  max-width: 320px;
+  max-width: 300px;
   line-height: 1.6;
 }
 .overlay-msg.err { color: var(--danger); }
 
-/* ── SCROLLBARS ────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+/* ── STATUS BAR ────────────────────────────────────── */
+#statusbar {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+}
 
-/* ── PERSON HIGHLIGHT ──────────────────────────────────── */
-tr.person-match td { outline: 1px solid var(--accent2); }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 </style>
 </head>
-<body>
+
+<body style="display:flex;flex-direction:column;height:100%">
 
 <!-- TOP BAR -->
 <div id="topbar">
   <div id="logo">RosterView</div>
-  <div class="tb-sep"></div>
+  <div class="sep"></div>
 
   <span class="tb-label">Sheet</span>
-  <select id="sheet-sel" class="tb-select" title="Select month sheet"></select>
+  <select id="sheet-sel" class="tb-select"></select>
 
-  <div class="tb-sep"></div>
-  <span class="tb-label">Person</span>
-  <input id="person-filter" class="tb-input" type="search"
-         placeholder="Filter by name…" autocomplete="off" list="person-list">
-  <datalist id="person-list"></datalist>
+  <div class="sep"></div>
+  <span class="tb-label">Find person</span>
+  <input id="name-input" class="tb-input" type="search"
+         placeholder="Type a name…" autocomplete="off" list="name-list">
+  <datalist id="name-list"></datalist>
 
-  <div class="tb-sep"></div>
-  <span class="tb-label">Freeze col</span>
-  <select id="freeze-sel" class="tb-select" title="Freeze column"></select>
+  <button id="prev-btn" class="tb-btn" title="Previous match">▲</button>
+  <button id="next-btn" class="tb-btn" title="Next match">▼</button>
+  <button id="clear-btn" class="tb-btn" title="Clear search">✕</button>
 
-  <div class="tb-sep"></div>
-  <button id="theme-btn" class="tb-btn" title="Toggle theme">☀ Excel view</button>
-  <button id="refresh-btn" class="tb-btn" title="Refresh data">⟳ Refresh</button>
-
+  <div class="sep"></div>
+  <button id="refresh-btn" class="tb-btn">⟳ Refresh</button>
   <span id="status-text">—</span>
 </div>
 
-<!-- TABLE AREA -->
-<div id="table-outer">
+<!-- MATCH CHIPS PANEL -->
+<div id="match-panel">
+  <span id="match-label">Matches:</span>
+  <div id="match-list"></div>
+</div>
+
+<!-- IFRAME + OVERLAY -->
+<div id="frame-wrap">
   <div id="overlay">
     <div class="spinner"></div>
     <div class="overlay-msg" id="overlay-msg">Loading roster…</div>
   </div>
-  <div id="table-scroll">
-    <table id="data-table">
-      <thead><tr id="col-header"></tr></thead>
-      <tbody id="table-body"></tbody>
-    </table>
-  </div>
+  <iframe id="sheet-frame" allowfullscreen></iframe>
 </div>
 
 <!-- STATUS BAR -->
 <div id="statusbar">
-  <span id="row-info">—</span>
-  <span id="last-update">—</span>
+  <span id="left-status">—</span>
+  <span id="right-status">—</span>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// ════════════════════════════════════════════════════════
-//  CONFIGURATION  — adjust these to match your file
-// ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  CONFIGURATION
+// ════════════════════════════════════════════════════
 const FILE_ID       = '1K1G_hqrCbaaYdpz64auiiZTBSnmfKm7u';
 const HIDDEN_SHEETS = ['_PROCESS_LOG'];
+const NAMES_ROW     = 15;    // 1-based row where person names start
+const NAMES_COL     = 'D';   // column letter containing person names
+const MAX_ROW       = 55;    // stop reading data beyond this row
+// ════════════════════════════════════════════════════
 
-// Row (1-based) where person names appear in each sheet
-const NAMES_ROW     = 15;
-// Column letter where person names appear (e.g. 'A' or 'B')
-const NAMES_COL     = 'D';
-// ════════════════════════════════════════════════════════
+const FETCH_URL   = `https://docs.google.com/spreadsheets/d/${FILE_ID}/export?format=xlsx`;
+const NAMES_COL_0 = NAMES_COL.toUpperCase().charCodeAt(0) - 65; // 0-based
 
-const FETCH_URL = `https://docs.google.com/spreadsheets/d/${FILE_ID}/export?format=xlsx`;
-const NAMES_COL_IDX = NAMES_COL.toUpperCase().charCodeAt(0) - 65; // 0-based
+// Google Sheets preview URL for the iframe — gid is the sheet's numeric id
+// We build per-sheet URLs using the gid once we know them
+const GS_BASE = `https://docs.google.com/spreadsheets/d/${FILE_ID}/preview`;
 
-// ── State ────────────────────────────────────────────────
+// ── State ────────────────────────────────────────────
 let workbook      = null;
-let sheetData     = null;   // { headers, rows, merges, colStyles }
-let currentSheet  = null;
-let frozenColIdx  = -1;     // 0-based data col index (-1 = none)
-let personFilter  = '';
-let excelTheme    = false;
-let lastFetched   = null;
+let sheetMeta     = [];     // [{name, gid, names:[]}]
+let currentIdx    = 0;
+let matches       = [];     // names matching current search
+let activeMatch   = -1;
 
-// ── DOM ──────────────────────────────────────────────────
-const sheetSel     = document.getElementById('sheet-sel');
-const personInput  = document.getElementById('person-filter');
-const personList   = document.getElementById('person-list');
-const freezeSel    = document.getElementById('freeze-sel');
-const themeBtn     = document.getElementById('theme-btn');
-const refreshBtn   = document.getElementById('refresh-btn');
-const statusText   = document.getElementById('status-text');
-const overlay      = document.getElementById('overlay');
-const overlayMsg   = document.getElementById('overlay-msg');
-const colHeader    = document.getElementById('col-header');
-const tableBody    = document.getElementById('table-body');
-const rowInfo      = document.getElementById('row-info');
-const lastUpdate   = document.getElementById('last-update');
+// ── DOM ──────────────────────────────────────────────
+const sheetSel   = document.getElementById('sheet-sel');
+const nameInput  = document.getElementById('name-input');
+const nameList   = document.getElementById('name-list');
+const prevBtn    = document.getElementById('prev-btn');
+const nextBtn    = document.getElementById('next-btn');
+const clearBtn   = document.getElementById('clear-btn');
+const refreshBtn = document.getElementById('refresh-btn');
+const statusText = document.getElementById('status-text');
+const matchPanel = document.getElementById('match-panel');
+const matchList  = document.getElementById('match-list');
+const matchLabel = document.getElementById('match-label');
+const frame      = document.getElementById('sheet-frame');
+const overlay    = document.getElementById('overlay');
+const overlayMsg = document.getElementById('overlay-msg');
+const leftStatus = document.getElementById('left-status');
+const rightStatus= document.getElementById('right-status');
 
-// ── Helpers ──────────────────────────────────────────────
-function showOverlay(msg, isErr=false) {
+function showOverlay(msg, err=false) {
   overlay.classList.remove('hidden');
   overlayMsg.textContent = msg;
-  overlayMsg.className = 'overlay-msg' + (isErr ? ' err' : '');
+  overlayMsg.className = 'overlay-msg' + (err ? ' err' : '');
 }
 function hideOverlay() { overlay.classList.add('hidden'); }
 
-function colLetter(n) {   // 0-based → 'A','B',...,'Z','AA',...
-  let s = '';
-  n++;
-  while (n > 0) { n--; s = String.fromCharCode(65 + n%26) + s; n = Math.floor(n/26); }
-  return s;
-}
-
-function parseColor(c) {
-  if (!c) return null;
-  if (c.type === 'rgb' && c.rgb && c.rgb !== '00000000' && c.rgb !== 'FF000000') {
-    const rgb = c.rgb.slice(-6);          // strip alpha
-    if (rgb === '000000') return null;    // default black → let theme handle
-    return '#' + rgb;
-  }
-  return null;
-}
-
-function cellAddress(r, c) {
-  return colLetter(c) + (r + 1);
-}
-
-// ── Load workbook ─────────────────────────────────────────
+// ── Load workbook (xlsx for name extraction only) ────
 async function loadWorkbook() {
   showOverlay('Loading roster…');
   statusText.textContent = '…';
   try {
     const res = await fetch(FETCH_URL, { cache: 'no-store' });
     if (!res.ok) throw new Error(
-      `HTTP ${res.status} — make sure the file is shared publicly (Anyone with the link).`);
+      `HTTP ${res.status} — check the file is shared publicly.`);
     const buf = await res.arrayBuffer();
-    workbook = XLSX.read(buf, {
-      type: 'array',
-      cellDates: true,
-      cellStyles: true,
-      cellNF: true
-    });
-    lastFetched = new Date();
+    workbook = XLSX.read(buf, { type: 'array', cellDates: false });
 
-    // Populate sheet selector
-    const sheets = workbook.SheetNames.filter(n => !HIDDEN_SHEETS.includes(n));
+    // Extract sheet names, gids and person names
+    sheetMeta = [];
+    workbook.SheetNames.forEach((name, i) => {
+      if (HIDDEN_SHEETS.includes(name)) return;
+      const ws = workbook.Sheets[name];
+
+      // gid: SheetJS stores it in ws['!id'] or we fall back to index
+      const gid = (ws['!id'] !== undefined) ? ws['!id'] : i;
+
+      // Extract names from NAMES_COL, rows NAMES_ROW..MAX_ROW
+      const range = ws['!ref'] ? XLSX.utils.decode_range(ws['!ref']) : null;
+      const names = [];
+      if (range) {
+        for (let r = NAMES_ROW - 1; r < Math.min(MAX_ROW, range.e.r + 1); r++) {
+          const addr = XLSX.utils.encode_cell({ r, c: NAMES_COL_0 });
+          const cell = ws[addr];
+          if (cell && cell.v !== undefined && cell.v !== '') {
+            const val = String(cell.v).trim();
+            if (val) names.push({ name: val, row: r }); // row is 0-based
+          }
+        }
+      }
+
+      sheetMeta.push({ name, gid, names });
+    });
+
+    // Populate sheet dropdown
     sheetSel.innerHTML = '';
-    sheets.forEach(n => {
+    sheetMeta.forEach((s, i) => {
       const o = document.createElement('option');
-      o.value = o.textContent = n;
+      o.value = i;
+      o.textContent = s.name;
       sheetSel.appendChild(o);
     });
 
-    if (currentSheet && sheets.includes(currentSheet)) {
-      sheetSel.value = currentSheet;
+    // Restore last sheet
+    const saved = localStorage.getItem('rv_sheet');
+    if (saved !== null && saved < sheetMeta.length) {
+      currentIdx = parseInt(saved);
+      sheetSel.value = currentIdx;
     } else {
-      currentSheet = sheets[0] || null;
+      currentIdx = 0;
     }
 
-    renderSheet(currentSheet);
-    lastUpdate.textContent = `Updated ${lastFetched.toLocaleTimeString()}`;
-    statusText.textContent = `${sheets.length} sheets`;
+    switchSheet(currentIdx);
+    statusText.textContent = `${sheetMeta.length} sheets · ${new Date().toLocaleTimeString()}`;
   } catch(err) {
     showOverlay(err.message, true);
     statusText.textContent = 'Error';
   }
 }
 
-// ── Parse sheet data ──────────────────────────────────────
-function parseSheet(name) {
-  const ws = workbook.Sheets[name];
-  if (!ws) return null;
+// ── Switch sheet in iframe ───────────────────────────
+function switchSheet(idx) {
+  currentIdx = idx;
+  const s = sheetMeta[idx];
+  if (!s) return;
 
-  const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
-  const nRows = range.e.r - range.s.r + 1;
-  const nCols = range.e.c - range.s.c + 1;
-  const startR = range.s.r;
-  const startC = range.s.c;
+  localStorage.setItem('rv_sheet', idx);
+  clearSearch();
 
-  // Build rows array: each row = array of {value, style}
-  const rows = [];
-  for (let r = 0; r < nRows; r++) {
-    const row = [];
-    for (let c = 0; c < nCols; c++) {
-      const addr = XLSX.utils.encode_cell({ r: r + startR, c: c + startC });
-      const cell = ws[addr];
-      let val = '';
-      if (cell) {
-        if (cell.t === 'd' && cell.v instanceof Date) {
-          val = cell.v.toLocaleDateString();
-        } else if (cell.w !== undefined) {
-          val = cell.w;
-        } else if (cell.v !== undefined) {
-          val = String(cell.v);
-        }
-      }
-      const s = cell && cell.s ? cell.s : null;
-      row.push({ value: val, style: s });
+  // Populate name autocomplete for this sheet
+  nameList.innerHTML = '';
+  const seen = new Set();
+  s.names.forEach(({ name }) => {
+    if (!seen.has(name)) {
+      seen.add(name);
+      const opt = document.createElement('option');
+      opt.value = name;
+      nameList.appendChild(opt);
     }
-    rows.push(row);
-  }
+  });
 
-  // Parse merges
-  const merges = (ws['!merges'] || []).map(m => ({
-    rs: m.s.r - startR, re: m.e.r - startR,
-    cs: m.s.c - startC, ce: m.e.c - startC
-  }));
+  // Load sheet in iframe using Google Sheets preview with gid
+  const url = `${GS_BASE}?gid=${s.gid}`;
+  frame.src = url;
+  showOverlay(`Opening ${s.name}…`);
+  leftStatus.textContent = s.name;
+  rightStatus.textContent = `${s.names.length} people`;
 
-  // Column widths from sheet (wch = width in chars)
-  const colWidths = [];
-  const colInfo = ws['!cols'] || [];
-  for (let c = 0; c < nCols; c++) {
-    const ci = colInfo[c + startC];
-    colWidths.push(ci && ci.wch ? Math.max(40, Math.min(200, ci.wch * 7)) : 70);
-  }
-
-  return { rows, merges, nRows, nCols, startR, startC, colWidths };
+  frame.onload = () => hideOverlay();
+  // Fallback hide after 8s in case onload doesn't fire
+  setTimeout(() => hideOverlay(), 8000);
 }
 
-// ── Build style string from cell style object ─────────────
-function buildStyle(s, isExcel) {
-  if (!s || !isExcel) return '';
-  const parts = [];
+// ── Search / match logic ─────────────────────────────
+function doSearch() {
+  const term = nameInput.value.trim().toLowerCase();
+  nameInput.classList.toggle('active', term.length > 0);
 
-  // Background fill
-  if (s.fgColor) {
-    const bg = parseColor(s.fgColor);
-    if (bg) parts.push(`background:${bg}`);
-  } else if (s.bgColor) {
-    const bg = parseColor(s.bgColor);
-    if (bg) parts.push(`background:${bg}`);
-  }
-  if (s.patternType && s.patternType !== 'none' && s.patternType !== 'solid') {
-    // skip pattern fills that aren't solid
-  }
+  if (!term) { clearSearch(); return; }
 
-  // Font
-  if (s.bold)   parts.push('font-weight:700');
-  if (s.italic) parts.push('font-style:italic');
-  if (s.color) {
-    const fc = parseColor(s.color);
-    if (fc) parts.push(`color:${fc}`);
-  }
-
-  // Alignment
-  if (s.alignment) {
-    if (s.alignment.horizontal) {
-      const map = { center:'center', right:'right', left:'left', general:'left' };
-      parts.push(`text-align:${map[s.alignment.horizontal] || 'left'}`);
+  const s = sheetMeta[currentIdx];
+  const seen = new Set();
+  matches = [];
+  s.names.forEach(entry => {
+    if (entry.name.toLowerCase().includes(term) && !seen.has(entry.name)) {
+      seen.add(entry.name);
+      matches.push(entry);
     }
-    if (s.alignment.wrapText) parts.push('white-space:normal');
+  });
+
+  // Build chips
+  matchList.innerHTML = '';
+  if (matches.length === 0) {
+    matchPanel.classList.add('visible');
+    matchLabel.textContent = 'No match';
+    return;
   }
 
-  // Borders — only in excel theme
-  const bd = s.border || s.borders;
-  if (bd) {
-    ['top','bottom','left','right'].forEach(side => {
-      const b = bd[side];
-      if (b && b.style && b.style !== 'none') {
-        const w = b.style === 'thin' ? '1px' :
-                  b.style === 'medium' ? '2px' :
-                  b.style === 'thick' ? '3px' : '1px';
-        const bc = b.color ? (parseColor(b.color) || '#000') : '#000';
-        parts.push(`border-${side}:${w} solid ${bc}`);
-      }
-    });
-  }
+  matchPanel.classList.add('visible');
+  matchLabel.textContent = `${matches.length} match${matches.length > 1 ? 'es' : ''}:`;
+  matches.forEach((m, i) => {
+    const chip = document.createElement('button');
+    chip.className = 'match-chip';
+    chip.textContent = m.name;
+    chip.addEventListener('click', () => activateMatch(i));
+    matchList.appendChild(chip);
+  });
 
-  return parts.join(';');
+  // Auto-activate first match
+  activateMatch(0);
 }
 
-// ── Render sheet ──────────────────────────────────────────
-function renderSheet(name) {
-  if (!workbook || !name) return;
-  currentSheet = name;
-  personInput.value = '';
-  personFilter = '';
+function activateMatch(i) {
+  if (i < 0 || i >= matches.length) return;
+  activeMatch = i;
 
-  const parsed = parseSheet(name);
-  if (!parsed) { showOverlay('Could not parse sheet.', true); return; }
-  sheetData = parsed;
+  // Update chip highlight
+  matchList.querySelectorAll('.match-chip').forEach((c, ci) =>
+    c.classList.toggle('active', ci === i));
 
-  // Build column header row (col letters)
-  colHeader.innerHTML = '<th style="min-width:36px;max-width:36px;width:36px"></th>';
-  for (let c = 0; c < parsed.nCols; c++) {
-    const th = document.createElement('th');
-    th.textContent = colLetter(parsed.startC + c);
-    th.style.width = parsed.colWidths[c] + 'px';
-    th.style.minWidth = parsed.colWidths[c] + 'px';
-    if (c === frozenColIdx) {
-      th.classList.add('frozen-cell', 'head-cell');
-      th.style.left = (36) + 'px';   // account for row-number col
-    }
-    colHeader.appendChild(th);
-  }
+  // Navigate iframe to the row
+  // Google Sheets preview supports #gid=X&range=A1 style anchors
+  const s = sheetMeta[currentIdx];
+  const m = matches[i];
+  const rowNum = m.row + 1; // convert 0-based to 1-based
+  const rangeStr = `${NAMES_COL}${rowNum}`;
+  frame.src = `${GS_BASE}?gid=${s.gid}&range=${rangeStr}`;
+  showOverlay(`Navigating to ${m.name}…`);
+  frame.onload = () => hideOverlay();
+  setTimeout(() => hideOverlay(), 5000);
 
-  // Build merge lookup: "r,c" → {rowspan, colspan} or null (spanned)
-  const mergeMap = {};
-  const spanned  = new Set();
-  parsed.merges.forEach(m => {
-    mergeMap[`${m.rs},${m.cs}`] = { rowspan: m.re-m.rs+1, colspan: m.ce-m.cs+1 };
-    for (let r2 = m.rs; r2 <= m.re; r2++) {
-      for (let c2 = m.cs; c2 <= m.ce; c2++) {
-        if (r2 !== m.rs || c2 !== m.cs) spanned.add(`${r2},${c2}`);
-      }
-    }
-  });
-
-  // Build freeze dropdown
-  freezeSel.innerHTML = '<option value="-1">None</option>';
-  for (let c = 0; c < parsed.nCols; c++) {
-    const o = document.createElement('option');
-    o.value = c;
-    o.textContent = colLetter(parsed.startC + c);
-    freezeSel.appendChild(o);
-  }
-  freezeSel.value = frozenColIdx;
-
-  // Build names datalist for autocomplete
-  personList.innerHTML = '';
-  const nameColInParsed = NAMES_COL_IDX - parsed.startC;
-  const names = new Set();
-  parsed.rows.forEach((row, ri) => {
-    const absRow = ri + parsed.startR;
-    if (absRow >= NAMES_ROW - 1) {
-      const cell = row[nameColInParsed];
-      if (cell && cell.value.trim()) names.add(cell.value.trim());
-    }
-  });
-  names.forEach(n => {
-    const opt = document.createElement('option');
-    opt.value = n;
-    personList.appendChild(opt);
-  });
-
-  // Render table body
-  tableBody.innerHTML = '';
-  const isExcel = excelTheme;
-
-  // Calculate frozen col left offset
-  const frozenLeft = 36; // row number col width
-
-  parsed.rows.forEach((row, ri) => {
-    const absRow = ri + parsed.startR;
-    const tr = document.createElement('tr');
-    tr.dataset.row = ri;
-
-    // Row number cell
-    const tdNum = document.createElement('td');
-    tdNum.textContent = absRow + 1;
-    tdNum.style.cssText = 'position:sticky;left:0;z-index:2;';
-    tr.appendChild(tdNum);
-
-    row.forEach((cell, ci) => {
-      const key = `${ri},${ci}`;
-      if (spanned.has(key)) return;  // skip spanned cells
-
-      const td = document.createElement('td');
-      td.textContent = cell.value;
-      td.title = cell.value;
-
-      // Merge
-      const mg = mergeMap[key];
-      if (mg) {
-        if (mg.rowspan > 1) td.rowSpan = mg.rowspan;
-        if (mg.colspan > 1) td.colSpan = mg.colspan;
-      }
-
-      // Width
-      td.style.width = parsed.colWidths[ci] + 'px';
-      td.style.minWidth = parsed.colWidths[ci] + 'px';
-
-      // Excel style
-      const styleStr = buildStyle(cell.style, isExcel);
-      if (styleStr) td.style.cssText += ';' + styleStr;
-
-      // Frozen column
-      if (ci === frozenColIdx) {
-        td.classList.add('frozen-cell');
-        td.style.left = frozenLeft + 'px';
-        td.style.zIndex = 3;
-      }
-
-      tr.appendChild(td);
-    });
-
-    tableBody.appendChild(tr);
-  });
-
-  applyPersonFilter();
-  updateFreezePositions();
-  hideOverlay();
+  leftStatus.textContent = `${s.name} — row ${rowNum}: ${m.name}`;
 }
 
-// ── Apply person filter ───────────────────────────────────
-function applyPersonFilter() {
-  if (!sheetData) return;
-  const term = personFilter.toLowerCase().trim();
-  const rows = tableBody.querySelectorAll('tr');
-  const nameColInParsed = NAMES_COL_IDX - sheetData.startC;
-  let visible = 0, total = 0;
-
-  rows.forEach((tr, ri) => {
-    const row = sheetData.rows[ri];
-    if (!row) return;
-    total++;
-
-    if (!term) {
-      tr.classList.remove('row-hidden', 'person-match');
-      visible++;
-      return;
-    }
-
-    const nameCell = row[nameColInParsed];
-    const nameVal  = nameCell ? nameCell.value.toLowerCase() : '';
-    const match    = nameVal.includes(term);
-
-    tr.classList.toggle('row-hidden', !match);
-    tr.classList.toggle('person-match', match);
-    if (match) visible++;
-  });
-
-  rowInfo.textContent = term
-    ? `${visible} of ${total} rows (filtered by name)`
-    : `${total} rows · ${sheetData.nCols} columns`;
+function clearSearch() {
+  nameInput.value = '';
+  nameInput.classList.remove('active');
+  matches = [];
+  activeMatch = -1;
+  matchPanel.classList.remove('visible');
+  matchList.innerHTML = '';
+  matchLabel.textContent = 'Matches:';
 }
 
-// ── Update frozen column positions ────────────────────────
-function updateFreezePositions() {
-  // Remove all existing frozen styles
-  tableBody.querySelectorAll('.frozen-cell').forEach(el => {
-    el.classList.remove('frozen-cell');
-    el.style.left = '';
-    el.style.zIndex = '';
-  });
-  colHeader.querySelectorAll('.frozen-cell').forEach(el => {
-    el.classList.remove('frozen-cell', 'head-cell');
-    el.style.left = '';
-  });
-
-  if (frozenColIdx < 0) return;
-
-  const frozenLeft = 36;  // row-number col
-
-  // Header
-  const ths = colHeader.querySelectorAll('th');
-  // +1 because first th is row-number
-  const fth = ths[frozenColIdx + 1];
-  if (fth) {
-    fth.classList.add('frozen-cell', 'head-cell');
-    fth.style.left = frozenLeft + 'px';
-  }
-
-  // Body rows
-  tableBody.querySelectorAll('tr').forEach(tr => {
-    const tds = tr.querySelectorAll('td');
-    // +1 for row-number td
-    const ftd = tds[frozenColIdx + 1];
-    if (ftd) {
-      ftd.classList.add('frozen-cell');
-      ftd.style.left = frozenLeft + 'px';
-      ftd.style.zIndex = 3;
-    }
-  });
-}
-
-// ── Theme toggle ──────────────────────────────────────────
-function toggleTheme() {
-  excelTheme = !excelTheme;
-  document.body.classList.toggle('excel-theme', excelTheme);
-  themeBtn.textContent = excelTheme ? '🌙 Dark view' : '☀ Excel view';
-  themeBtn.classList.toggle('active', excelTheme);
-  localStorage.setItem('rv_theme', excelTheme ? '1' : '0');
-  // Re-render to apply/remove Excel styles
-  if (currentSheet) renderSheet(currentSheet);
-}
-
-// ── Events ────────────────────────────────────────────────
-sheetSel.addEventListener('change', () => renderSheet(sheetSel.value));
-
-personInput.addEventListener('input', () => {
-  personFilter = personInput.value;
-  applyPersonFilter();
+// ── Navigation buttons ───────────────────────────────
+prevBtn.addEventListener('click', () => {
+  if (matches.length === 0) return;
+  activateMatch((activeMatch - 1 + matches.length) % matches.length);
+});
+nextBtn.addEventListener('click', () => {
+  if (matches.length === 0) return;
+  activateMatch((activeMatch + 1) % matches.length);
+});
+clearBtn.addEventListener('click', () => {
+  clearSearch();
+  // Reload current sheet without range anchor
+  switchSheet(currentIdx);
 });
 
-freezeSel.addEventListener('change', () => {
-  frozenColIdx = parseInt(freezeSel.value);
-  updateFreezePositions();
+// ── Sheet selector ───────────────────────────────────
+sheetSel.addEventListener('change', () => switchSheet(parseInt(sheetSel.value)));
+
+// ── Search input ─────────────────────────────────────
+nameInput.addEventListener('input', doSearch);
+nameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (matches.length > 0) activateMatch((activeMatch + 1) % matches.length);
+  }
 });
 
-themeBtn.addEventListener('click', toggleTheme);
+// ── Refresh ──────────────────────────────────────────
 refreshBtn.addEventListener('click', loadWorkbook);
 
-// ── Restore preferences ───────────────────────────────────
-if (localStorage.getItem('rv_theme') === '1') {
-  excelTheme = true;
-  document.body.classList.add('excel-theme');
-  themeBtn.textContent = '🌙 Dark view';
-  themeBtn.classList.add('active');
-}
-
-// ── Service worker ────────────────────────────────────────
+// ── Service worker ────────────────────────────────────
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
-// ── Boot ──────────────────────────────────────────────────
+// ── Boot ─────────────────────────────────────────────
 loadWorkbook();
 </script>
 </body>
