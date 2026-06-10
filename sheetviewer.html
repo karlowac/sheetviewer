@@ -281,9 +281,8 @@ const MAX_ROW       = 55;    // stop reading data beyond this row
 const FETCH_URL   = `https://docs.google.com/spreadsheets/d/${FILE_ID}/export?format=xlsx`;
 const NAMES_COL_0 = NAMES_COL.toUpperCase().charCodeAt(0) - 65; // 0-based
 
-// Google Sheets preview URL for the iframe — gid is the sheet's numeric id
-// We build per-sheet URLs using the gid once we know them
-const GS_BASE = `https://docs.google.com/spreadsheets/d/${FILE_ID}/preview`;
+// Google Sheets embed URL — use /htmlview with sheet name, no gid needed
+const GS_EMBED = `https://docs.google.com/spreadsheets/d/${FILE_ID}/htmlview`;
 
 // ── State ────────────────────────────────────────────
 let workbook      = null;
@@ -330,12 +329,17 @@ async function loadWorkbook() {
 
     // Extract sheet names, gids and person names
     sheetMeta = [];
+
+    // Get gids from workbook metadata — most reliable source
+    const wbSheets = (workbook.Workbook && workbook.Workbook.Sheets) || [];
+
     workbook.SheetNames.forEach((name, i) => {
       if (HIDDEN_SHEETS.includes(name)) return;
       const ws = workbook.Sheets[name];
 
-      // gid: SheetJS stores it in ws['!id'] or we fall back to index
-      const gid = (ws['!id'] !== undefined) ? ws['!id'] : i;
+      // Get gid from Workbook.Sheets metadata
+      const meta = wbSheets[i];
+      const gid  = (meta && meta.sheetId !== undefined) ? meta.sheetId : i;
 
       // Extract names from NAMES_COL, rows NAMES_ROW..MAX_ROW
       const range = ws['!ref'] ? XLSX.utils.decode_range(ws['!ref']) : null;
@@ -346,7 +350,7 @@ async function loadWorkbook() {
           const cell = ws[addr];
           if (cell && cell.v !== undefined && cell.v !== '') {
             const val = String(cell.v).trim();
-            if (val) names.push({ name: val, row: r }); // row is 0-based
+            if (val) names.push({ name: val, row: r });
           }
         }
       }
@@ -374,6 +378,7 @@ async function loadWorkbook() {
 
     switchSheet(currentIdx);
     statusText.textContent = `${sheetMeta.length} sheets · ${new Date().toLocaleTimeString()}`;
+    console.log('Sheet gids:', sheetMeta.map(s => `${s.name}:${s.gid}`).join(', '));
   } catch(err) {
     showOverlay(err.message, true);
     statusText.textContent = 'Error';
@@ -381,6 +386,13 @@ async function loadWorkbook() {
 }
 
 // ── Switch sheet in iframe ───────────────────────────
+function sheetUrl(gid, rangeStr) {
+  // Use gid parameter which works reliably with htmlview
+  let url = `${GS_EMBED}?gid=${gid}`;
+  if (rangeStr) url += `&range=${rangeStr}`;
+  return url;
+}
+
 function switchSheet(idx) {
   currentIdx = idx;
   const s = sheetMeta[idx];
@@ -401,15 +413,13 @@ function switchSheet(idx) {
     }
   });
 
-  // Load sheet in iframe using Google Sheets preview with gid
-  const url = `${GS_BASE}?gid=${s.gid}`;
-  frame.src = url;
+  // Load sheet in iframe
+  frame.src = sheetUrl(s.gid);
   showOverlay(`Opening ${s.name}…`);
   leftStatus.textContent = s.name;
   rightStatus.textContent = `${s.names.length} people`;
 
   frame.onload = () => hideOverlay();
-  // Fallback hide after 8s in case onload doesn't fire
   setTimeout(() => hideOverlay(), 8000);
 }
 
@@ -460,13 +470,12 @@ function activateMatch(i) {
   matchList.querySelectorAll('.match-chip').forEach((c, ci) =>
     c.classList.toggle('active', ci === i));
 
-  // Navigate iframe to the row
-  // Google Sheets preview supports #gid=X&range=A1 style anchors
+  // Navigate iframe to the person's row
   const s = sheetMeta[currentIdx];
   const m = matches[i];
   const rowNum = m.row + 1; // convert 0-based to 1-based
   const rangeStr = `${NAMES_COL}${rowNum}`;
-  frame.src = `${GS_BASE}?gid=${s.gid}&range=${rangeStr}`;
+  frame.src = sheetUrl(s.gid, rangeStr);
   showOverlay(`Navigating to ${m.name}…`);
   frame.onload = () => hideOverlay();
   setTimeout(() => hideOverlay(), 5000);
