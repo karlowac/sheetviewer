@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- v3 -->
+<!DOCTYPE html><!-- v4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -12,24 +12,26 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #0d1117;
-  --surface:   #161b22;
-  --surface2:  #21262d;
-  --border:    #30363d;
-  --accent:    #58a6ff;
-  --accent2:   #3fb950;
-  --text:      #e6edf3;
-  --text-dim:  #8b949e;
-  --danger:    #f85149;
-  --radius:    6px;
-  --mono:      'IBM Plex Mono', monospace;
-  --sans:      'IBM Plex Sans', sans-serif;
+  --bg:       #0d1117;
+  --surface:  #161b22;
+  --surface2: #21262d;
+  --border:   #30363d;
+  --accent:   #58a6ff;
+  --accent2:  #3fb950;
+  --text:     #e6edf3;
+  --text-dim: #8b949e;
+  --danger:   #f85149;
+  --highlight:#2d4a22;
+  --radius:   6px;
+  --mono:     'IBM Plex Mono', monospace;
+  --sans:     'IBM Plex Sans', sans-serif;
+  --frozen:   4; /* number of frozen columns */
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); }
 
-/* ── TOP BAR ───────────────────────────────────────── */
+/* ── TOP BAR ─────────────────────────────────────────── */
 #topbar {
   display: flex;
   align-items: center;
@@ -43,132 +45,102 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   overflow-y: hidden;
 }
 #topbar::-webkit-scrollbar { height: 0; }
-
-#logo {
-  font-family: var(--mono);
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--accent);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
+#logo { font-family: var(--mono); font-size: 0.88rem; font-weight: 600; color: var(--accent); white-space: nowrap; flex-shrink: 0; }
 .sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
-
-.tb-label {
-  font-size: 0.62rem;
-  font-weight: 600;
-  color: var(--text-dim);
-  white-space: nowrap;
-  flex-shrink: 0;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.tb-select {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  background: var(--surface2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 4px 8px;
-  cursor: pointer;
-  flex-shrink: 0;
-  max-width: 160px;
-}
+.tb-label { font-size: 0.62rem; font-weight: 600; color: var(--text-dim); white-space: nowrap; flex-shrink: 0; letter-spacing: 0.05em; text-transform: uppercase; }
+.tb-select { font-family: var(--mono); font-size: 0.72rem; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 8px; cursor: pointer; flex-shrink: 0; max-width: 160px; }
 .tb-select:focus { outline: none; border-color: var(--accent); }
-
-.tb-input {
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  background: var(--surface2);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 4px 8px;
-  width: 140px;
-  flex-shrink: 0;
-  transition: border-color 0.15s;
-}
+.tb-input { font-family: var(--mono); font-size: 0.72rem; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 8px; width: 140px; flex-shrink: 0; transition: border-color 0.15s; }
 .tb-input:focus { outline: none; border-color: var(--accent2); }
 .tb-input::placeholder { color: var(--text-dim); }
 .tb-input.active { border-color: var(--accent2); }
-
-.tb-btn {
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 4px 10px;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s;
-}
+.tb-btn { font-family: var(--sans); font-size: 0.68rem; font-weight: 600; background: transparent; color: var(--accent); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 10px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 0.15s, border-color 0.15s; }
 .tb-btn:hover { background: var(--surface2); border-color: var(--accent); }
+#status-text { font-family: var(--mono); font-size: 0.62rem; color: var(--text-dim); white-space: nowrap; flex-shrink: 0; margin-left: auto; }
 
-#status-text {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  color: var(--text-dim);
-  white-space: nowrap;
-  flex-shrink: 0;
-  margin-left: auto;
-}
-
-/* ── NAME MATCH PANEL ──────────────────────────────── */
-#match-panel {
-  display: none;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 12px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  flex-shrink: 0;
-}
+/* ── MATCH PANEL ─────────────────────────────────────── */
+#match-panel { display: none; align-items: center; gap: 8px; padding: 4px 12px; background: var(--surface); border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 0.7rem; color: var(--text-dim); flex-shrink: 0; }
 #match-panel.visible { display: flex; }
-#match-list {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  flex: 1;
-}
-.match-chip {
-  background: var(--surface2);
-  border: 1px solid var(--accent2);
-  border-radius: 4px;
-  padding: 2px 8px;
-  color: var(--accent2);
-  font-size: 0.68rem;
-  cursor: pointer;
-  transition: background 0.12s;
-  white-space: nowrap;
-}
-.match-chip:hover { background: var(--accent2); color: var(--bg); }
-.match-chip.active { background: var(--accent2); color: var(--bg); }
+#match-list { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+.match-chip { background: var(--surface2); border: 1px solid var(--accent2); border-radius: 4px; padding: 2px 8px; color: var(--accent2); font-size: 0.68rem; cursor: pointer; transition: background 0.12s; white-space: nowrap; }
+.match-chip:hover, .match-chip.active { background: var(--accent2); color: var(--bg); }
 #match-label { color: var(--text-dim); white-space: nowrap; flex-shrink: 0; }
 
-/* ── IFRAME CONTAINER ──────────────────────────────── */
-#frame-wrap {
+/* ── TABLE AREA ──────────────────────────────────────── */
+#table-wrap {
   flex: 1;
+  overflow: auto;
   position: relative;
-  display: flex;
-  flex-direction: column;
-}
-#sheet-frame {
-  flex: 1;
-  border: none;
-  width: 100%;
+  background: #ffffff;
 }
 
-/* ── OVERLAY ───────────────────────────────────────── */
+/* The actual table */
+#sheet-table {
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: #1a1a1a;
+  white-space: nowrap;
+}
+#sheet-table td {
+  border: 1px solid #c8c8c8;
+  padding: 3px 8px;
+  min-width: 60px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 22px;
+  vertical-align: middle;
+  background-color: #ffffff;
+}
+
+/* ── GRID HEADERS (row numbers + col letters) ────────── */
+/* Header cells share the same td styling but get a grey bg */
+#sheet-table td.hdr-corner,
+#sheet-table td.hdr-col,
+#sheet-table td.hdr-row {
+  background-color: #f0f0f0 !important;
+  color: #555 !important;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.65rem;
+  border-color: #b0b0b0;
+  user-select: none;
+}
+
+/* Frozen columns: first 4 DATA columns + the row-number header col
+   (they're nth-child 2..5 because col 1 is the row-number header) */
+#sheet-table td:nth-child(1) { position: sticky; left: 0; z-index: 3; }
+#sheet-table td:nth-child(2) { position: sticky; left: var(--col0-w, 36px); z-index: 2; }
+#sheet-table td:nth-child(3) { position: sticky; left: var(--col1-w, 96px); z-index: 2; }
+#sheet-table td:nth-child(4) { position: sticky; left: var(--col2-w, 156px); z-index: 2; }
+#sheet-table td:nth-child(5) { position: sticky; left: var(--col3-w, 216px); z-index: 2; }
+
+/* Frozen rows: first 13 DATA rows + the col-letter header row
+   are rendered inside <thead> which is sticky */
+#sheet-table thead td { position: sticky; top: 0; z-index: 3; }
+/* Corner cell (top-left) is both row- and col-sticky */
+#sheet-table thead td:nth-child(1) { z-index: 5; }
+/* Frozen data rows (rows 1-13) also sticky */
+#sheet-table tr.frozen-row td { position: sticky; z-index: 2; }
+/* top values set inline via JS */
+
+/* Highlighted row */
+#sheet-table tr.highlighted td {
+  outline: 2px solid var(--accent2);
+  outline-offset: -1px;
+  position: relative;
+  z-index: 3;
+}
+#sheet-table tr.highlighted td:nth-child(1),
+#sheet-table tr.highlighted td:nth-child(2),
+#sheet-table tr.highlighted td:nth-child(3),
+#sheet-table tr.highlighted td:nth-child(4),
+#sheet-table tr.highlighted td:nth-child(5) {
+  z-index: 6;
+}
+
+/* ── OVERLAY ─────────────────────────────────────────── */
 #overlay {
   position: absolute;
   inset: 0;
@@ -178,41 +150,16 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   justify-content: center;
   gap: 14px;
   background: var(--bg);
-  z-index: 10;
+  z-index: 20;
 }
 #overlay.hidden { display: none; }
-.spinner {
-  width: 36px; height: 36px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.75s linear infinite;
-}
+.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.75s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.overlay-msg {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  text-align: center;
-  max-width: 300px;
-  line-height: 1.6;
-}
+.overlay-msg { font-family: var(--mono); font-size: 0.8rem; color: var(--text-dim); text-align: center; max-width: 300px; line-height: 1.6; }
 .overlay-msg.err { color: var(--danger); }
 
-/* ── STATUS BAR ────────────────────────────────────── */
-#statusbar {
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  color: var(--text-dim);
-}
+/* ── STATUS BAR ──────────────────────────────────────── */
+#statusbar { height: 24px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; background: var(--bg); border-top: 1px solid var(--border); flex-shrink: 0; font-family: var(--mono); font-size: 0.62rem; color: var(--text-dim); }
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -226,38 +173,33 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 <div id="topbar">
   <div id="logo">RosterView</div>
   <div class="sep"></div>
-
   <span class="tb-label">Sheet</span>
   <select id="sheet-sel" class="tb-select"></select>
-
   <div class="sep"></div>
   <span class="tb-label">Find person</span>
-  <input id="name-input" class="tb-input" type="search"
-         placeholder="Type a name…" autocomplete="off" list="name-list">
+  <input id="name-input" class="tb-input" type="search" placeholder="Type a name…" autocomplete="off" list="name-list">
   <datalist id="name-list"></datalist>
-
   <button id="prev-btn" class="tb-btn" title="Previous match">▲</button>
   <button id="next-btn" class="tb-btn" title="Next match">▼</button>
   <button id="clear-btn" class="tb-btn" title="Clear search">✕</button>
-
   <div class="sep"></div>
   <button id="refresh-btn" class="tb-btn">⟳ Refresh</button>
   <span id="status-text">—</span>
 </div>
 
-<!-- MATCH CHIPS PANEL -->
+<!-- MATCH CHIPS -->
 <div id="match-panel">
   <span id="match-label">Matches:</span>
   <div id="match-list"></div>
 </div>
 
-<!-- IFRAME + OVERLAY -->
-<div id="frame-wrap">
+<!-- TABLE + OVERLAY -->
+<div id="table-wrap">
   <div id="overlay">
     <div class="spinner"></div>
     <div class="overlay-msg" id="overlay-msg">Loading roster…</div>
   </div>
-  <iframe id="sheet-frame" allowfullscreen></iframe>
+  <table id="sheet-table"></table>
 </div>
 
 <!-- STATUS BAR -->
@@ -273,25 +215,24 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 // ════════════════════════════════════════════════════
 const FILE_ID       = '1K1G_hqrCbaaYdpz64auiiZTBSnmfKm7u';
 const HIDDEN_SHEETS = ['_PROCESS_LOG'];
-const NAMES_ROW     = 15;    // 1-based row where person names start
-const NAMES_COL     = 'D';   // column letter containing person names
-const MAX_ROW       = 55;    // stop reading data beyond this row
+const NAMES_ROW     = 15;   // 1-based row where names start
+const NAMES_COL     = 'D';  // column letter with person names
+const MAX_ROW       = 53;   // last data row (1-based) — rows beyond this hidden
+const FROZEN_COLS   = 4;    // columns A-D fixed while scrolling right
+const FROZEN_ROWS   = 13;   // first 13 rows fixed while scrolling down
+const NAME_COL_W    = 200;  // forced width (px) for the names column (D)
 // ════════════════════════════════════════════════════
 
 const FETCH_URL   = `https://docs.google.com/spreadsheets/d/${FILE_ID}/export?format=xlsx`;
-const NAMES_COL_0 = NAMES_COL.toUpperCase().charCodeAt(0) - 65; // 0-based
+const NAMES_COL_0 = NAMES_COL.toUpperCase().charCodeAt(0) - 65;
 
-// Google Sheets embed URL — use /htmlview with sheet name, no gid needed
-const GS_EMBED = `https://docs.google.com/spreadsheets/d/${FILE_ID}/htmlview`;
+// ── State ─────────────────────────────────────────────
+let sheetMeta   = [];  // [{name, ws, names:[{name,row}]}]
+let currentIdx  = 0;
+let matches     = [];
+let activeMatch = -1;
 
-// ── State ────────────────────────────────────────────
-let workbook      = null;
-let sheetMeta     = [];     // [{name, gid, names:[]}]
-let currentIdx    = 0;
-let matches       = [];     // names matching current search
-let activeMatch   = -1;
-
-// ── DOM ──────────────────────────────────────────────
+// ── DOM ───────────────────────────────────────────────
 const sheetSel   = document.getElementById('sheet-sel');
 const nameInput  = document.getElementById('name-input');
 const nameList   = document.getElementById('name-list');
@@ -303,97 +244,279 @@ const statusText = document.getElementById('status-text');
 const matchPanel = document.getElementById('match-panel');
 const matchList  = document.getElementById('match-list');
 const matchLabel = document.getElementById('match-label');
-const frame      = document.getElementById('sheet-frame');
 const overlay    = document.getElementById('overlay');
 const overlayMsg = document.getElementById('overlay-msg');
 const leftStatus = document.getElementById('left-status');
 const rightStatus= document.getElementById('right-status');
+const tableWrap  = document.getElementById('table-wrap');
 
-function showOverlay(msg, err=false) {
+
+function showOverlay(msg, isErr = false) {
   overlay.classList.remove('hidden');
   overlayMsg.textContent = msg;
-  overlayMsg.className = 'overlay-msg' + (err ? ' err' : '');
+  overlayMsg.className = 'overlay-msg' + (isErr ? ' err' : '');
 }
 function hideOverlay() { overlay.classList.add('hidden'); }
 
-// ── Load workbook (xlsx for name extraction only) ────
+// ── Color helpers ─────────────────────────────────────
+function argbToRgba(argb) {
+  if (!argb || argb.length < 6) return null;
+  const hex = argb.length === 6 ? 'FF' + argb : argb;
+  const a = parseInt(hex.slice(0,2), 16) / 255;
+  const r = parseInt(hex.slice(2,4), 16);
+  const g = parseInt(hex.slice(4,6), 16);
+  const b = parseInt(hex.slice(6,8), 16);
+  // Skip fully transparent or pure white (no fill)
+  if (a < 0.05) return null;
+  if (r > 253 && g > 253 && b > 253) return null;
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function cellStyle(cell) {
+  const style = {};
+  if (!cell || !cell.s) return style;
+  const s = cell.s;
+
+  // Background color
+  const fgColor = s.fgColor || (s.fill && s.fill.fgColor);
+  if (fgColor) {
+    const col = fgColor.rgb ? argbToRgba(fgColor.rgb)
+               : fgColor.theme != null ? null  // theme colors need palette lookup, skip
+               : null;
+    if (col) style.backgroundColor = col;
+  }
+
+  // Bold
+  if (s.bold || (s.font && s.font.bold)) style.fontWeight = 'bold';
+
+  // Font color
+  const fontColor = s.color || (s.font && s.font.color);
+  if (fontColor && fontColor.rgb) {
+    const col = argbToRgba(fontColor.rgb);
+    if (col) style.color = col;
+  }
+
+  // Horizontal alignment
+  const align = s.alignment && s.alignment.horizontal;
+  if (align === 'center') style.textAlign = 'center';
+  else if (align === 'right') style.textAlign = 'right';
+
+  return style;
+}
+
+// ── Render a worksheet into the table ────────────────
+function renderSheet(ws) {
+  const table = document.getElementById('sheet-table');
+  table.innerHTML = '';
+  if (!ws || !ws['!ref']) return;
+
+  const range   = XLSX.utils.decode_range(ws['!ref']);
+  const dataCols = range.e.c + 1;
+  const dataRows = Math.min(MAX_ROW, range.e.r + 1); // cap at MAX_ROW
+
+  // Column widths from xlsx metadata
+  const wsCols    = ws['!cols'] || [];
+  const colWidths = [];
+  for (let c = 0; c < dataCols; c++) {
+    let w = wsCols[c] && wsCols[c].wpx ? wsCols[c].wpx
+          : wsCols[c] && wsCols[c].wch ? Math.round(wsCols[c].wch * 7)
+          : 80;
+    w = Math.max(40, Math.min(w, 300));
+    // Force name column width
+    if (c === NAMES_COL_0) w = NAME_COL_W;
+    colWidths.push(w);
+  }
+
+  // Row number header col width (for "1", "2" … labels)
+  const ROW_HDR_W = 36;
+
+  // Set CSS vars for sticky left offsets.
+  // col 0 in DOM = row-number header (width ROW_HDR_W)
+  // col 1 in DOM = data col A, col 2 = data col B, etc.
+  let offset = ROW_HDR_W;
+  document.documentElement.style.setProperty('--col0-w', ROW_HDR_W + 'px');
+  for (let c = 0; c < FROZEN_COLS && c < dataCols; c++) {
+    document.documentElement.style.setProperty(`--col${c + 1}-w`, offset + 'px');
+    offset += colWidths[c];
+  }
+
+  // Merged cells
+  const merges    = ws['!merges'] || [];
+  const mergeMap  = {};
+  const skipCells = new Set();
+  merges.forEach(m => {
+    mergeMap[`${m.s.r},${m.s.c}`] = { rowspan: m.e.r - m.s.r + 1, colspan: m.e.c - m.s.c + 1 };
+    for (let r = m.s.r; r <= m.e.r; r++)
+      for (let c = m.s.c; c <= m.e.c; c++)
+        if (r !== m.s.r || c !== m.s.c) skipCells.add(`${r},${c}`);
+  });
+
+  // Helper: column index → letter(s)
+  function colLetter(c) {
+    let s = '';
+    c++;
+    while (c > 0) { s = String.fromCharCode(65 + (c - 1) % 26) + s; c = Math.floor((c - 1) / 26); }
+    return s;
+  }
+
+  // Helper: make a header cell
+  function hdrCell(text, cls, w) {
+    const td = document.createElement('td');
+    td.className = cls;
+    td.textContent = text;
+    td.style.minWidth = w + 'px';
+    td.style.maxWidth = w + 'px';
+    td.style.width    = w + 'px';
+    return td;
+  }
+
+  // Helper: make a data cell
+  function dataCell(cell, c, isSticky, stickyTop) {
+    const td = document.createElement('td');
+    const w  = colWidths[c];
+    td.style.minWidth = w + 'px';
+    td.style.maxWidth = w + 'px';
+    td.style.width    = w + 'px';
+
+    if (cell) {
+      td.textContent = cell.w !== undefined ? cell.w : (cell.v != null ? String(cell.v) : '');
+      const s = cellStyle(cell);
+      Object.assign(td.style, s);
+    }
+
+    // Frozen col background fallback
+    if (c < FROZEN_COLS && !td.style.backgroundColor) {
+      td.style.backgroundColor = '#ffffff';
+    }
+
+    if (isSticky) {
+      td.style.top = stickyTop + 'px';
+    }
+
+    return td;
+  }
+
+  // ── THEAD: column-letter header row ──────────────────
+  const thead = document.createElement('thead');
+  const hdrTr = document.createElement('tr');
+
+  // Corner cell
+  hdrTr.appendChild(hdrCell('', 'hdr-corner', ROW_HDR_W));
+  // One cell per data column
+  for (let c = 0; c < dataCols; c++) {
+    hdrTr.appendChild(hdrCell(colLetter(c), 'hdr-col', colWidths[c]));
+  }
+  thead.appendChild(hdrTr);
+  table.appendChild(thead);
+
+  // ── TBODY: data rows ──────────────────────────────────
+  const tbody = document.createElement('tbody');
+
+  // We need to know each frozen row's pixel top offset so sticky works
+  // We use a fixed row height estimate (22px) since we can't measure before insert
+  const ROW_H      = 22;
+  const HDR_H      = ROW_H; // the thead row height
+
+  for (let r = 0; r < dataRows; r++) {
+    const isFrozen  = r < FROZEN_ROWS;
+    const stickyTop = isFrozen ? HDR_H + r * ROW_H : 0;
+
+    const tr = document.createElement('tr');
+    tr.dataset.row = r;
+    if (isFrozen) {
+      tr.classList.add('frozen-row');
+      tr.style.top = stickyTop + 'px'; // used by CSS z-index, actual top set per-cell
+    }
+
+    // Row-number header cell
+    const rowHdr = hdrCell(r + 1, 'hdr-row', ROW_HDR_W);
+    if (isFrozen) rowHdr.style.top = stickyTop + 'px';
+    tr.appendChild(rowHdr);
+
+    // Data cells
+    for (let c = 0; c < dataCols; c++) {
+      if (skipCells.has(`${r},${c}`)) continue;
+
+      const addr = XLSX.utils.encode_cell({ r, c });
+      const cell = ws[addr];
+      const td   = dataCell(cell, c, isFrozen, stickyTop);
+
+      const mk = `${r},${c}`;
+      if (mergeMap[mk]) {
+        if (mergeMap[mk].rowspan > 1) td.rowSpan = mergeMap[mk].rowspan;
+        if (mergeMap[mk].colspan > 1) td.colSpan = mergeMap[mk].colspan;
+      }
+
+      tr.appendChild(td);
+    }
+
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+}
+
+// ── Load workbook ─────────────────────────────────────
 async function loadWorkbook() {
   showOverlay('Loading roster…');
   statusText.textContent = '…';
+  sheetMeta = [];
+
   try {
     const res = await fetch(FETCH_URL, { cache: 'no-store' });
-    if (!res.ok) throw new Error(
-      `HTTP ${res.status} — check the file is shared publicly.`);
+    if (!res.ok) throw new Error(`HTTP ${res.status} — is the file shared publicly?`);
     const buf = await res.arrayBuffer();
-    workbook = XLSX.read(buf, { type: 'array', cellDates: false });
+    // cellStyles:true is required to read fill colors, fonts etc.
+    const wb  = XLSX.read(buf, { type: 'array', cellDates: false, cellStyles: true });
 
-    // Extract sheet names, gids and person names
-    sheetMeta = [];
+    const wbSheets = (wb.Workbook && wb.Workbook.Sheets) || [];
 
-    // Get gids from workbook metadata — most reliable source
-    const wbSheets = (workbook.Workbook && workbook.Workbook.Sheets) || [];
-
-    workbook.SheetNames.forEach((name, i) => {
+    wb.SheetNames.forEach((name, rawIdx) => {
       if (HIDDEN_SHEETS.includes(name)) return;
-      const ws = workbook.Sheets[name];
+      const ws  = wb.Sheets[name];
+      const gid = (wbSheets[rawIdx] && wbSheets[rawIdx].sheetId != null)
+                    ? wbSheets[rawIdx].sheetId : rawIdx;
 
-      // Get gid from Workbook.Sheets metadata
-      const meta = wbSheets[i];
-      const gid  = (meta && meta.sheetId !== undefined) ? meta.sheetId : i;
-
-      // Extract names from NAMES_COL, rows NAMES_ROW..MAX_ROW
-      const range = ws['!ref'] ? XLSX.utils.decode_range(ws['!ref']) : null;
+      const ref   = ws['!ref'] ? XLSX.utils.decode_range(ws['!ref']) : null;
       const names = [];
-      if (range) {
-        for (let r = NAMES_ROW - 1; r < Math.min(MAX_ROW, range.e.r + 1); r++) {
-          const addr = XLSX.utils.encode_cell({ r, c: NAMES_COL_0 });
-          const cell = ws[addr];
-          if (cell && cell.v !== undefined && cell.v !== '') {
-            const val = String(cell.v).trim();
-            if (val) names.push({ name: val, row: r });
+      if (ref) {
+        const rEnd = Math.min(MAX_ROW - 1, ref.e.r);
+        for (let r = NAMES_ROW - 1; r <= rEnd; r++) {
+          const cell = ws[XLSX.utils.encode_cell({ r, c: NAMES_COL_0 })];
+          if (cell && cell.v != null && String(cell.v).trim() !== '') {
+            names.push({ name: String(cell.v).trim(), row: r });
           }
         }
       }
 
-      sheetMeta.push({ name, gid, names });
+      sheetMeta.push({ name, gid, ws, names });
     });
 
-    // Populate sheet dropdown
+    // Populate selector
     sheetSel.innerHTML = '';
     sheetMeta.forEach((s, i) => {
       const o = document.createElement('option');
-      o.value = i;
-      o.textContent = s.name;
+      o.value = i; o.textContent = s.name;
       sheetSel.appendChild(o);
     });
 
-    // Restore last sheet
-    const saved = localStorage.getItem('rv_sheet');
-    if (saved !== null && saved < sheetMeta.length) {
-      currentIdx = parseInt(saved);
-      sheetSel.value = currentIdx;
-    } else {
-      currentIdx = 0;
-    }
+    const saved = parseInt(localStorage.getItem('rv_sheet') ?? '0', 10);
+    currentIdx = (saved >= 0 && saved < sheetMeta.length) ? saved : 0;
+    sheetSel.value = currentIdx;
 
     switchSheet(currentIdx);
-    statusText.textContent = `${sheetMeta.length} sheets · ${new Date().toLocaleTimeString()}`;
-    console.log('Sheet gids:', sheetMeta.map(s => `${s.name}:${s.gid}`).join(', '));
-  } catch(err) {
+    statusText.textContent = `${sheetMeta.length} sheet${sheetMeta.length !== 1 ? 's' : ''} · ${new Date().toLocaleTimeString()}`;
+
+  } catch (err) {
+    console.error('loadWorkbook:', err);
     showOverlay(err.message, true);
     statusText.textContent = 'Error';
   }
 }
 
-// ── Switch sheet in iframe ───────────────────────────
-function sheetUrl(gid, rangeStr) {
-  // Use gid parameter which works reliably with htmlview
-  let url = `${GS_EMBED}?gid=${gid}`;
-  if (rangeStr) url += `&range=${rangeStr}`;
-  return url;
-}
-
+// ── Switch sheet ──────────────────────────────────────
 function switchSheet(idx) {
+  if (!sheetMeta.length) return;
   currentIdx = idx;
   const s = sheetMeta[idx];
   if (!s) return;
@@ -401,7 +524,6 @@ function switchSheet(idx) {
   localStorage.setItem('rv_sheet', idx);
   clearSearch();
 
-  // Populate name autocomplete for this sheet
   nameList.innerHTML = '';
   const seen = new Set();
   s.names.forEach(({ name }) => {
@@ -413,42 +535,42 @@ function switchSheet(idx) {
     }
   });
 
-  // Load sheet in iframe
-  frame.src = sheetUrl(s.gid);
-  showOverlay(`Opening ${s.name}…`);
-  leftStatus.textContent = s.name;
+  leftStatus.textContent  = s.name;
   rightStatus.textContent = `${s.names.length} people`;
 
-  frame.onload = () => hideOverlay();
-  setTimeout(() => hideOverlay(), 8000);
+  renderSheet(s.ws);
+  hideOverlay();
+  tableWrap.scrollTo(0, 0);
 }
 
-// ── Search / match logic ─────────────────────────────
+// ── Search ────────────────────────────────────────────
 function doSearch() {
   const term = nameInput.value.trim().toLowerCase();
   nameInput.classList.toggle('active', term.length > 0);
-
   if (!term) { clearSearch(); return; }
 
   const s = sheetMeta[currentIdx];
+  if (!s) return;
+
   const seen = new Set();
   matches = [];
   s.names.forEach(entry => {
-    if (entry.name.toLowerCase().includes(term) && !seen.has(entry.name)) {
+    if (!seen.has(entry.name) && entry.name.toLowerCase().includes(term)) {
       seen.add(entry.name);
       matches.push(entry);
     }
   });
 
-  // Build chips
   matchList.innerHTML = '';
+  matchPanel.classList.add('visible');
+
   if (matches.length === 0) {
-    matchPanel.classList.add('visible');
     matchLabel.textContent = 'No match';
+    // Clear any previous highlight
+    document.getElementById("sheet-table").querySelectorAll('tr.highlighted').forEach(r => r.classList.remove('highlighted'));
     return;
   }
 
-  matchPanel.classList.add('visible');
   matchLabel.textContent = `${matches.length} match${matches.length > 1 ? 'es' : ''}:`;
   matches.forEach((m, i) => {
     const chip = document.createElement('button');
@@ -458,7 +580,6 @@ function doSearch() {
     matchList.appendChild(chip);
   });
 
-  // Auto-activate first match
   activateMatch(0);
 }
 
@@ -466,61 +587,52 @@ function activateMatch(i) {
   if (i < 0 || i >= matches.length) return;
   activeMatch = i;
 
-  // Update chip highlight
   matchList.querySelectorAll('.match-chip').forEach((c, ci) =>
     c.classList.toggle('active', ci === i));
 
-  // Navigate iframe to the person's row
-  const s = sheetMeta[currentIdx];
   const m = matches[i];
-  const rowNum = m.row + 1; // convert 0-based to 1-based
-  const rangeStr = `${NAMES_COL}${rowNum}`;
-  frame.src = sheetUrl(s.gid, rangeStr);
-  showOverlay(`Navigating to ${m.name}…`);
-  frame.onload = () => hideOverlay();
-  setTimeout(() => hideOverlay(), 5000);
 
-  leftStatus.textContent = `${s.name} — row ${rowNum}: ${m.name}`;
+  // Remove old highlight
+  document.getElementById("sheet-table").querySelectorAll('tr.highlighted').forEach(r => r.classList.remove('highlighted'));
+
+  // Find and highlight the row
+  const tr = document.getElementById("sheet-table").querySelector(`tr[data-row="${m.row}"]`);
+  if (tr) {
+    tr.classList.add('highlighted');
+    // Scroll row into view
+    tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  leftStatus.textContent = `${sheetMeta[currentIdx].name} — row ${m.row + 1}: ${m.name}`;
 }
 
 function clearSearch() {
   nameInput.value = '';
   nameInput.classList.remove('active');
-  matches = [];
+  matches     = [];
   activeMatch = -1;
   matchPanel.classList.remove('visible');
-  matchList.innerHTML = '';
+  matchList.innerHTML    = '';
   matchLabel.textContent = 'Matches:';
+  document.getElementById("sheet-table").querySelectorAll('tr.highlighted').forEach(r => r.classList.remove('highlighted'));
 }
 
-// ── Navigation buttons ───────────────────────────────
-prevBtn.addEventListener('click', () => {
-  if (matches.length === 0) return;
-  activateMatch((activeMatch - 1 + matches.length) % matches.length);
-});
-nextBtn.addEventListener('click', () => {
-  if (matches.length === 0) return;
-  activateMatch((activeMatch + 1) % matches.length);
-});
-clearBtn.addEventListener('click', () => {
-  clearSearch();
-  // Reload current sheet without range anchor
-  switchSheet(currentIdx);
-});
-
-// ── Sheet selector ───────────────────────────────────
-sheetSel.addEventListener('change', () => switchSheet(parseInt(sheetSel.value)));
-
-// ── Search input ─────────────────────────────────────
+// ── Events ────────────────────────────────────────────
+sheetSel.addEventListener('change', () => switchSheet(parseInt(sheetSel.value, 10)));
 nameInput.addEventListener('input', doSearch);
 nameInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') {
     e.preventDefault();
-    if (matches.length > 0) activateMatch((activeMatch + 1) % matches.length);
+    if (matches.length) activateMatch((activeMatch + 1) % matches.length);
   }
 });
-
-// ── Refresh ──────────────────────────────────────────
+prevBtn.addEventListener('click', () => {
+  if (matches.length) activateMatch((activeMatch - 1 + matches.length) % matches.length);
+});
+nextBtn.addEventListener('click', () => {
+  if (matches.length) activateMatch((activeMatch + 1) % matches.length);
+});
+clearBtn.addEventListener('click', () => { clearSearch(); tableWrap.scrollTo(0, 0); });
 refreshBtn.addEventListener('click', loadWorkbook);
 
 // ── Service worker ────────────────────────────────────
@@ -528,7 +640,6 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 
-// ── Boot ─────────────────────────────────────────────
 loadWorkbook();
 </script>
 </body>
