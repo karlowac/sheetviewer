@@ -1,9 +1,9 @@
-const CACHE = 'sheetviewer-v1';
+const CACHE = 'rosterview-v4';
 const ASSETS = [
-  './sheetviewer.html',
+  './index.html',
   './manifest.json',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
-  'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap'
+  'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap'
 ];
 
 // Install: cache static assets
